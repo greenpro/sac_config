@@ -1,16 +1,24 @@
 <launch>
-    <arg name="load_robot_description" default="false" />
+  <!-- By default we do not overwrite the URDF. Change the following to true to change the default behavior -->
+  <arg name="load_robot_description" default="false"/>
 
-    <param if="$(arg load_robot_description)" name="robot_description" command="$(find xacro)/xacro.py '$(find sac_description)/urdf/scorbot_description.xacro'" />
+  <!-- The name of the parameter under which the URDF is loaded -->
+  <arg name="robot_description" default="robot_description"/>
 
-    <param name="robot_description_semantic" textfile="$(find sac_config)/config/scorbot.srdf" />
+  <!-- Load universal robot description format (URDF) -->
+  <param if="$(arg load_robot_description)" name="$(arg robot_description)" command="$(find xacro)/xacro --inorder '$(find sac_description)/urdf/scorbot_description.xacro'"/>
 
-    <group ns="robot_description_planning">
-        <rosparam command="load" file="$(find sac_config)/config/scorbot_joint_limits.yaml" />
-    </group>
+  <!-- The semantic description that corresponds to the URDF -->
+  <param name="$(arg robot_description)_semantic" textfile="$(find sac_config)/config/scorbot_model.srdf" />
+  
+  <!-- Load updated joint limits (override information from URDF) -->
+  <group ns="$(arg robot_description)_planning">
+    <rosparam command="load" file="$(find sac_config)/config/scorbot_joint_limits.yaml"/>
+  </group>
 
-    <group ns="robot_description_kinematics">
-        <rosparam command="load" file="$(find sac_config)/config/scorbot_kinematics.yaml" />
-    </group>
-
+  <!-- Load default settings for kinematics; these settings are overridden by settings in a node's namespace -->
+  <group ns="$(arg robot_description)_kinematics">
+    <rosparam command="load" file="$(find sac_config)/config/scorbot_kinematics.yaml"/>
+  </group>
+  
 </launch>

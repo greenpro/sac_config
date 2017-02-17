@@ -1,12 +1,13 @@
 controller_list:
-  - name: fake_main_group_controller
+  - name: fake_arm_controller
     joints:
+      - virtual_joint
       - base_joint
       - shoulder_joint
       - elbow_joint
       - pitch_joint
       - roll_joint
-  - name: fake_gripp_group_controller
+  - name: fake_Gripper_controller
     joints:
       - pad1_joint
       - pad2_joint

@@ -1,0 +1,6 @@
+<launch>
+    <!-- Add the planning context -->
+    <include file="$(find sac_config)/launch/andreas_arm_planning_context.launch">
+        <arg name="load_robot_description" value="true" />
+    </include>
+</launch>
